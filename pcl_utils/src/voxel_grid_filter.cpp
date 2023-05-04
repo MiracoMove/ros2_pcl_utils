@@ -32,11 +32,17 @@ void VoxelGridFilter::PclCallback(const sensor_msgs::msg::PointCloud2::SharedPtr
   filter.setLeafSize(0.05f, 0.05f, 0.05f);
   filter.filter(*cloud);
 
-  // pcl::PassThrough<pcl::PointXYZ> pass_z;
-  // pass_z.setInputCloud(cloud);
-  // pass_z.setFilterFieldName("y");
-  // pass_z.setFilterLimits(1.0, 2.0);
-  // pass_z.filter(*cloud);
+  pcl::PassThrough<pcl::PointXYZ> pass_z;
+  pass_z.setInputCloud(cloud);
+  pass_z.setFilterFieldName("z");
+  pass_z.setFilterLimits(0.2, 3.9);
+  pass_z.filter(*cloud);
+
+  pcl::PassThrough<pcl::PointXYZ> pass_y;
+  pass_y.setInputCloud(cloud);
+  pass_y.setFilterFieldName("y");
+  pass_y.setFilterLimits(0, 0.7);
+  pass_y.filter(*cloud);
 
   sensor_msgs::msg::PointCloud2 plc_msg;
   pcl::toROSMsg(*cloud, plc_msg);
